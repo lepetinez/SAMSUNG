@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:text="Linia: "
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textSize="13sp" />
+
+        <TextView
+            android:text="12"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/line"
+            android:textSize="13sp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:text="Z:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textVie3"
+            android:textSize="13sp" />
+
+        <TextView
+            android:text="Mirego"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/from"
+            android:textSize="13sp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp">
+    <TextView
+        android:text="Do:"
+        android:layout_width="match_parent"
+        android:textStyle="normal|bold"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:textSize="13sp" />
+
+        <TextView
+            android:text="Kosciuszki"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/to"
+            android:textSize="13sp"
+            android:layout_marginBottom="5dp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp">
+    <TextView
+        android:text="Punktualność:"
+        android:layout_width="match_parent"
+        android:textStyle="normal|bold"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        android:textSize="13sp" />
+
+    <TextView
+        android:text="Opozniony 2 minuty"
+        android:layout_width="match_parent"
+        android:textStyle="normal|bold"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:id="@+id/late"
+        android:textSize="13sp"
+        android:textAlignment="textEnd" />
+    </LinearLayout>
+
+</LinearLayout>

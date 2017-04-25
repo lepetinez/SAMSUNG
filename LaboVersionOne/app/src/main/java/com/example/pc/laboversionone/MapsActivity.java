@@ -1,0 +1,754 @@
+package com.example.pc.laboversionone;
+
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+public class MapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final String lineRoute = "http://www.zditm.szczecin.pl/json/trasy.inc.php?gmvid=";
+    private final static String lineStopsUrl = "http://www.zditm.szczecin.pl/json/slupki.inc.php?linia=";
+    private final static String allStopsUrl = "http://www.zditm.szczecin.pl/json/slupki.inc.php";
+    private final static String url = "http://www.zditm.szczecin.pl/json/pojazdy.inc.php";
+    public TextView[] detailsText = new TextView[17];
+    String singleBusData[] = new String[17];
+    String stopInfo;
+    Timer timer = new Timer();
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
+    Marker mCurrLocationMarker;
+    LocationRequest mLocationRequest;
+    double latitude;
+    double longitude;
+    NavigationView navigationView;
+    Toolbar mToolbar;
+    private String line;
+    private List<String> busesDetailsList = new ArrayList<>();
+    private List<Marker> busesMarkers = new ArrayList<>();
+    private List<Marker> stopsMarkers = new ArrayList<>();
+    private List<Polyline> lineDrawing = new ArrayList<>();
+    private GoogleMap mMap;
+
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        MultiDex.install(this);
+        FloatingActionButton zoomIn = (FloatingActionButton) findViewById(R.id.zoom_in);
+        FloatingActionButton zoomOut = (FloatingActionButton) findViewById(R.id.zoom_out);
+        zoomIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.animateCamera(CameraUpdateFactory.zoomBy(2));
+
+            }
+        });
+        zoomOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.animateCamera(CameraUpdateFactory.zoomBy(-2));
+
+
+            }
+        });
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkLocationPermission();
+        }
+        if (!CheckGooglePlayServices()) {
+            Log.d("onCreate", "Finishing test case since Google Play Services are not available");
+            finish();
+        } else {
+            Log.d("onCreate", "Google Play Services available.");
+        }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
+        navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.drawer_opened, R.string.drawer_closed) {
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+                syncState();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu();
+                syncState();
+            }
+        };
+        drawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+    }
+
+    public void setWindowAdapteronMarkers() {
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                if (marker.getTitle() != null) {
+                    stopInfo = "http://www.zditm.szczecin.pl/json/slupekkursy.inc.php?slupek=" + marker.getTitle();
+                    try {
+                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(1300, TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
+
+                    View v = getLayoutInflater().inflate(R.layout.bus_stop_info_layout, null);
+                    detailsText[0] = (TextView) v.findViewById(R.id.textView1);
+                    detailsText[1] = (TextView) v.findViewById(R.id.textView2);
+                    detailsText[2] = (TextView) v.findViewById(R.id.linia1);
+                    detailsText[3] = (TextView) v.findViewById(R.id.linia2);
+                    detailsText[4] = (TextView) v.findViewById(R.id.linia3);
+                    detailsText[5] = (TextView) v.findViewById(R.id.linia4);
+                    detailsText[6] = (TextView) v.findViewById(R.id.linia5);
+                    detailsText[7] = (TextView) v.findViewById(R.id.kierunek1);
+                    detailsText[8] = (TextView) v.findViewById(R.id.kierunek2);
+                    detailsText[9] = (TextView) v.findViewById(R.id.kierunek3);
+                    detailsText[10] = (TextView) v.findViewById(R.id.kierunek4);
+                    detailsText[11] = (TextView) v.findViewById(R.id.kierunek5);
+
+                    detailsText[12] = (TextView) v.findViewById(R.id.godzina1);
+                    detailsText[13] = (TextView) v.findViewById(R.id.godzina2);
+                    detailsText[14] = (TextView) v.findViewById(R.id.godzina3);
+                    detailsText[15] = (TextView) v.findViewById(R.id.godzina4);
+                    detailsText[16] = (TextView) v.findViewById(R.id.godzina5);
+
+
+                    detailsText[0].setText(singleBusData[0]);
+                    detailsText[1].setText(singleBusData[1]);
+
+                    detailsText[2].setText(singleBusData[2]);
+                    detailsText[3].setText(singleBusData[3]);
+                    detailsText[4].setText(singleBusData[4]);
+                    detailsText[5].setText(singleBusData[5]);
+                    detailsText[6].setText(singleBusData[6]);
+
+                    detailsText[7].setText(singleBusData[7]);
+                    detailsText[8].setText(singleBusData[9]);
+                    detailsText[9].setText(singleBusData[11]);
+                    detailsText[10].setText(singleBusData[13]);
+                    detailsText[11].setText(singleBusData[15]);
+
+                    detailsText[12].setText(singleBusData[8]);
+                    detailsText[13].setText(singleBusData[10]);
+                    detailsText[14].setText(singleBusData[12]);
+                    detailsText[15].setText(singleBusData[14]);
+                    detailsText[16].setText(singleBusData[16]);
+
+                    v.setMinimumWidth(600);
+                    v.setMinimumHeight(500);
+                    return v;
+                } else {
+
+                    View v = getLayoutInflater().inflate(R.layout.bus_or_tram_details, null);
+
+                    TextView line = (TextView) v.findViewById(R.id.line);
+                    TextView from = (TextView) v.findViewById(R.id.from);
+                    TextView to = (TextView) v.findViewById(R.id.to);
+                    TextView late = (TextView) v.findViewById(R.id.late);
+
+                    line.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4));
+                    from.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 1));
+                    to.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 2));
+                    late.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 3));
+
+                    v.setMinimumWidth(765);
+                    v.setMinimumHeight(320);
+                    return v;
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean CheckGooglePlayServices() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_layout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.autobusy:
+                navigationView.getMenu().setGroupVisible(R.id.main_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, true);
+                navigationView.getMenu().setGroupVisible(R.id.dopodzialu, false);
+                return true;
+            case R.id.tramwaje:
+                navigationView.getMenu().setGroupVisible(R.id.tram_group, true);
+                navigationView.getMenu().setGroupVisible(R.id.main_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.dopodzialu, false);
+                return true;
+            case R.id.tramwaje1:
+                showLine("1", "1");
+                return true;
+            case R.id.tramwaje2:
+                showLine("2", "2");
+                return true;
+            case R.id.tramwaje3:
+                showLine("3", "3");
+                return true;
+            case R.id.tramwaje4:
+                showLine("4", "4");
+                return true;
+            case R.id.tramwaje5:
+                showLine("5", "5");
+                return true;
+            case R.id.tramwaje6:
+                showLine("6", "6");
+                return true;
+            case R.id.tramwaje7:
+                showLine("7", "7");
+                return true;
+            case R.id.tramwaje8:
+                showLine("8", "8");
+                return true;
+            case R.id.tramwaje9:
+                showLine("9", "9");
+                return true;
+            case R.id.tramwaje10:
+                showLine("10", "84");
+                return true;
+            case R.id.tramwaje11:
+                showLine("11", "10");
+                return true;
+            case R.id.tramwaje12:
+                showLine("12", "11");
+                return true;
+            case R.id.autobusy1:
+                showLine("51", "12");
+                return true;
+            case R.id.autobusy2:
+                showLine("52", "13");
+                return true;
+            case R.id.autobusy3:
+                showLine("53", "14");
+                return true;
+            case R.id.autobusy4:
+                showLine("54", "15");
+                return true;
+            case R.id.autobusy5:
+                showLine("55", "16");
+                return true;
+            case R.id.autobusy6:
+                showLine("56", "16");
+                return true;
+            case R.id.autobusy7:
+                showLine("57", "19");
+                return true;
+            case R.id.autobusy8:
+                showLine("58", "20");
+                return true;
+            case R.id.autobusy9:
+                showLine("59", "21");
+                return true;
+            case R.id.autobusy10:
+                showLine("60", "22");
+                return true;
+            case R.id.autobusy11:
+                showLine("61", "23");
+                return true;
+            case R.id.autobusy12:
+                showLine("62", "24");
+                return true;
+            case R.id.autobusy13:
+                showLine("63", "25");
+                return true;
+            case R.id.autobusy14:
+                showLine("64", "26");
+                return true;
+            case R.id.autobusy15:
+                showLine("65", "27");
+                return true;
+            case R.id.autobusy16:
+                showLine("66", "28");
+                return true;
+            case R.id.autobusy17:
+                showLine("67", "29");
+                return true;
+            case R.id.autobusy18:
+                showLine("68", "30");
+                return true;
+            case R.id.autobusy19:
+                showLine("69", "31");
+                return true;
+            case R.id.autobusy20:
+                showLine("70", "32");
+                return true;
+            case R.id.autobusy21:
+                showLine("71", "33");
+                return true;
+            case R.id.autobusy22:
+                showLine("72", "94");
+                return true;
+            case R.id.autobusy23:
+                showLine("73", "35");
+                return true;
+            case R.id.autobusy24:
+                showLine("74", "36");
+                return true;
+            case R.id.autobusy25:
+                showLine("75", "37");
+                return true;
+            case R.id.autobusy26:
+                showLine("76", "38");
+                return true;
+            case R.id.autobusy27:
+                showLine("77", "39");
+                return true;
+            case R.id.autobusy28:
+                showLine("78", "40");
+                return true;
+            case R.id.autobusy29:
+                showLine("79", "41");
+                return true;
+            case R.id.autobusy30:
+                showLine("80", "42");
+                return true;
+            case R.id.autobusy31:
+                showLine("81", "43");
+                return true;
+            case R.id.autobusy32:
+                showLine("82", "44");
+                return true;
+            case R.id.autobusy33:
+                showLine("83", "79");
+                return true;
+            case R.id.autobusy34:
+                showLine("84", "45");
+                return true;
+            case R.id.autobusy35:
+                showLine("85", "17");
+                return true;
+            case R.id.autobusy36:
+                showLine("86", "85");
+                return true;
+            case R.id.autobusy37:
+                showLine("87", "46");
+                return true;
+            case R.id.autobusy38:
+                showLine("88", "86");
+                return true;
+            case R.id.autobusy39:
+                showLine("93", "34");
+                return true;
+            case R.id.autobusy40:
+                showLine("101", "47");
+                return true;
+            case R.id.autobusy41:
+                showLine("102", "48");
+                return true;
+            case R.id.autobusy42:
+                showLine("103", "49");
+                return true;
+            case R.id.autobusy43:
+                showLine("105", "91");
+                return true;
+            case R.id.autobusy44:
+                showLine("106", "50");
+                return true;
+            case R.id.autobusy45:
+                showLine("107", "51");
+                return true;
+            case R.id.autobusy46:
+                showLine("108", "92");
+                return true;
+            case R.id.autobusy47:
+                showLine("109", "52");
+                return true;
+            case R.id.autobusy48:
+                showLine("110", "53");
+                return true;
+            case R.id.autobusy49:
+                showLine("111", "54");
+                return true;
+            case R.id.autobusy50:
+                showLine("121", "90");
+                return true;
+            case R.id.autobusy51:
+                showLine("122", "89");
+                return true;
+            case R.id.autobusy52:
+                showLine("123", "87");
+                return true;
+            case R.id.autobusy53:
+                showLine("124", "100");
+                return true;
+            case R.id.back_dzienne_autobusy:
+                navigationView.getMenu().setGroupVisible(R.id.day_bus_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, true);
+                navigationView.getMenu().setGroupVisible(R.id.dopodzialu, true);
+                return true;
+            case R.id.autobusy_posp1:
+                showLine("311", "55");
+                return true;
+            case R.id.autobusy_posp2:
+                showLine("302", "56");
+                return true;
+            case R.id.autobusy_posp3:
+                showLine("403", "57");
+                return true;
+            case R.id.autobusy_posp4:
+                showLine("404", "58");
+                return true;
+            case R.id.autobusy_posp5:
+                showLine("405", "59");
+                return true;
+            case R.id.autobusy_posp6:
+                showLine("306", "60");
+                return true;
+            case R.id.autobusy_posp7:
+                showLine("407", "61");
+                return true;
+            case R.id.back_autobusy_posp:
+                navigationView.getMenu().setGroupVisible(R.id.pospieszne_bus_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, true);
+                navigationView.getMenu().setGroupVisible(R.id.dopodzialu, true);
+                return true;
+            case R.id.autobusy_nocne1:
+                showLine("521", "62");
+                return true;
+            case R.id.autobusy_nocne2:
+                showLine("522", "63");
+                return true;
+            case R.id.autobusy_nocne3:
+                showLine("523", "64");
+                return true;
+            case R.id.autobusy_nocne4:
+                showLine("524", "65");
+                return true;
+            case R.id.autobusy_nocne5:
+                showLine("525", "66");
+                return true;
+            case R.id.autobusy_nocne6:
+                showLine("526", "67");
+                return true;
+            case R.id.autobusy_nocne7:
+                showLine("527", "68");
+                return true;
+            case R.id.autobusy_nocne8:
+                showLine("528", "69");
+                return true;
+            case R.id.autobusy_nocne9:
+                showLine("529", "70");
+                return true;
+            case R.id.autobusy_nocne10:
+                showLine("530", "71");
+                return true;
+            case R.id.autobusy_nocne11:
+                showLine("531", "72");
+                return true;
+            case R.id.autobusy_nocne12:
+                showLine("532", "73");
+                return true;
+            case R.id.autobusy_nocne13:
+                showLine("533", "74");
+                return true;
+            case R.id.autobusy_nocne14:
+                showLine("534", "75");
+                return true;
+            case R.id.autobusy_nocne15:
+                showLine("535", "93");
+                return true;
+            case R.id.autobusy_nocne16:
+                showLine("536", "88");
+                return true;
+            case R.id.back_autobusy_nocne:
+                navigationView.getMenu().setGroupVisible(R.id.nocne_bus_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, true);
+                return true;
+            case R.id.cofnij_tramwaje:
+                navigationView.getMenu().setGroupVisible(R.id.main_group, true);
+                navigationView.getMenu().setGroupVisible(R.id.tram_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.dopodzialu, true);
+
+                return true;
+            case R.id.Nocne:
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.nocne_bus_group, true);
+                return true;
+            case R.id.Dzienne:
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.day_bus_group, true);
+                return true;
+            case R.id.Pośpieszne:
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.pospieszne_bus_group, true);
+                return true;
+            case R.id.back_autobusy:
+                navigationView.getMenu().setGroupVisible(R.id.main_group, true);
+                navigationView.getMenu().setGroupVisible(R.id.bus_category_group, false);
+                navigationView.getMenu().setGroupVisible(R.id.dopodzialu, true);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showLine(final String line, String lineLine) {
+        timer.cancel();
+        timer = null;
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                public void run() {
+                        if (busesMarkers.size() != 0) {
+                            busesDetailsList.clear();
+                            for (Marker m : busesMarkers) {
+                                m.remove();
+                            }
+                            busesMarkers.clear();
+                        }
+                        new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
+                    }
+                });
+            }
+        };
+        this.line = line;
+        String tempLineRoute = lineRoute + line;
+        String tempLineStops = lineStopsUrl + lineLine;
+        Log.d("onClick", "Button is Clicked");
+        Log.d("onClick", url);
+
+        if (busesMarkers.size() != 0 || stopsMarkers.size() != 0 || lineDrawing.size() != 0) {
+            for (Marker m : busesMarkers) {
+                m.remove();
+            }
+            for (Marker m : stopsMarkers) {
+                m.remove();
+            }
+            for (Polyline m : lineDrawing) {
+                m.remove();
+            }
+            busesDetailsList.clear();
+            busesMarkers.clear();
+            stopsMarkers.clear();
+            lineDrawing.clear();
+        }
+
+        new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
+        new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
+        timer.scheduleAtFixedRate(timerTask, 0, 30100);
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        setWindowAdapteronMarkers();
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            }
+        } else {
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
+
+        mMap.setPadding(0, 105, 0, 0);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d("onLocationChanged", "entered");
+
+        mLastLocation = location;
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Twoje aktualne położenie: ");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        mCurrLocationMarker = mMap.addMarker(markerOptions);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        Toast.makeText(MapsActivity.this, "Twoje Aktualne Położenie", Toast.LENGTH_LONG).show();
+        Log.d("onLocationChanged", String.format("latitude:%.3f longitude:%.3f", latitude, longitude));
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            Log.d("onLocationChanged", "Removing Location Updates");
+        }
+        Log.d("onLocationChanged", "Exit");
+    }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        if (mGoogleApiClient == null) {
+                            buildGoogleApiClient();
+                        }
+                        mMap.setMyLocationEnabled(true);
+                    }
+                } else {
+
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+}

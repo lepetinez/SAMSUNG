@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/dopodzialu">
+        <item
+            android:id="@+id/Komunikacja"
+            android:title="Komunikacja" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/main_group"
+        >
+
+        <item
+            android:id="@+id/tramwaje"
+            android:icon="@drawable/tram_ic"
+            android:title="Tramwaje" />
+        <item
+            android:id="@+id/autobusy"
+            android:icon="@drawable/bus_ic"
+            android:title="Autobusy" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/bus_category_group"
+        android:visible="false">
+        <item
+            android:id="@+id/Dzienne"
+            android:icon="@drawable/dzien"
+            android:title="Dzienne" />
+        <item
+            android:id="@+id/Pośpieszne"
+            android:icon="@drawable/pospieszny"
+            android:title="Pośpieszne" />
+        <item
+            android:id="@+id/Nocne"
+            android:icon="@drawable/noc"
+            android:title="Nocne" />
+        <item
+            android:id="@+id/back_autobusy"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id = "@+id/tram_group"
+        android:visible="false">
+        <item
+            android:id="@+id/tramwaje1"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 1" />
+        <item
+            android:id="@+id/tramwaje2"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 2" />
+        <item
+            android:id="@+id/tramwaje3"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 3" />
+        <item
+            android:id="@+id/tramwaje4"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 4" />
+        <item
+            android:id="@+id/tramwaje5"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 5" />
+        <item
+            android:id="@+id/tramwaje6"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 6" />
+        <item
+            android:id="@+id/tramwaje7"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 7" />
+        <item
+            android:id="@+id/tramwaje8"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 8" />
+        <item
+            android:id="@+id/tramwaje9"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 9" />
+        <item
+            android:id="@+id/tramwaje10"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 10" />
+        <item
+            android:id="@+id/tramwaje11"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 11" />
+        <item
+            android:id="@+id/tramwaje12"
+            android:icon="@drawable/tram_ic"
+            android:title="Linia nr 12" />
+        <item
+            android:id="@+id/cofnij_tramwaje"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id = "@+id/day_bus_group"
+        android:visible="false">
+        <item
+            android:id="@+id/autobusy1"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 51" />
+        <item
+            android:id="@+id/autobusy2"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 52" />
+        <item
+            android:id="@+id/autobusy3"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 53" />
+        <item
+            android:id="@+id/autobusy4"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 54" />
+        <item
+            android:id="@+id/autobusy5"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 55" />
+        <item
+            android:id="@+id/autobusy6"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 56" />
+        <item
+            android:id="@+id/autobusy7"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 57" />
+        <item
+            android:id="@+id/autobusy8"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 58" />
+        <item
+            android:id="@+id/autobusy9"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 59" />
+        <item
+            android:id="@+id/autobusy10"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 60" />
+        <item
+            android:id="@+id/autobusy11"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 61" />
+        <item
+            android:id="@+id/autobusy12"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 62" />
+        <item
+            android:id="@+id/autobusy13"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 63" />
+        <item
+            android:id="@+id/autobusy14"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 64" />
+        <item
+            android:id="@+id/autobusy15"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 65" />
+        <item
+            android:id="@+id/autobusy16"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 66" />
+        <item
+            android:id="@+id/autobusy17"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 67" />
+        <item
+            android:id="@+id/autobusy18"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 68" />
+        <item
+            android:id="@+id/autobusy19"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 69" />
+        <item
+            android:id="@+id/autobusy20"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 70" />
+        <item
+            android:id="@+id/autobusy21"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 71" />
+        <item
+            android:id="@+id/autobusy22"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 72" />
+        <item
+            android:id="@+id/autobusy23"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 73" />
+        <item
+            android:id="@+id/autobusy24"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 74" />
+        <item
+            android:id="@+id/autobusy25"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 75" />
+        <item
+            android:id="@+id/autobusy26"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 76" />
+        <item
+            android:id="@+id/autobusy27"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 77" />
+        <item
+            android:id="@+id/autobusy28"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 78" />
+        <item
+            android:id="@+id/autobusy29"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 79" />
+        <item
+            android:id="@+id/autobusy30"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 80" />
+        <item
+            android:id="@+id/autobusy31"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 81" />
+        <item
+            android:id="@+id/autobusy32"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 82" />
+        <item
+            android:id="@+id/autobusy33"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 83" />
+        <item
+            android:id="@+id/autobusy34"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 84" />
+        <item
+            android:id="@+id/autobusy35"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 85" />
+        <item
+            android:id="@+id/autobusy36"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 86" />
+        <item
+            android:id="@+id/autobusy37"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 87" />
+        <item
+            android:id="@+id/autobusy38"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 88" />
+        <item
+            android:id="@+id/autobusy39"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 93" />
+        <item
+            android:id="@+id/autobusy40"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 101" />
+        <item
+            android:id="@+id/autobusy41"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 102" />
+        <item
+            android:id="@+id/autobusy42"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 103" />
+        <item
+            android:id="@+id/autobusy43"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 105" />
+        <item
+            android:id="@+id/autobusy44"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 106" />
+        <item
+            android:id="@+id/autobusy45"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 107" />
+        <item
+            android:id="@+id/autobusy46"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 108" />
+        <item
+            android:id="@+id/autobusy47"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 109" />
+        <item
+            android:id="@+id/autobusy48"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 110" />
+        <item
+            android:id="@+id/autobusy49"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 111" />
+        <item
+            android:id="@+id/autobusy50"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 121" />
+        <item
+            android:id="@+id/autobusy51"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 122" />
+        <item
+            android:id="@+id/autobusy52"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 123" />
+        <item
+            android:id="@+id/autobusy53"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 124" />
+        <item
+            android:id="@+id/back_dzienne_autobusy"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
+     </group>
+    <group android:checkableBehavior="single"
+            android:id = "@+id/pospieszne_bus_group"
+            android:visible="false">
+        <item
+            android:id="@+id/autobusy_posp1"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia A" />
+        <item
+            android:id="@+id/autobusy_posp2"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia B" />
+        <item
+            android:id="@+id/autobusy_posp3"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia C" />
+        <item
+            android:id="@+id/autobusy_posp4"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia D" />
+        <item
+            android:id="@+id/autobusy_posp5"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia E" />
+        <item
+            android:id="@+id/autobusy_posp6"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia F" />
+        <item
+            android:id="@+id/autobusy_posp7"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia G" />
+        <item
+            android:id="@+id/back_autobusy_posp"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id = "@+id/nocne_bus_group"
+        android:visible="false">
+        <item
+            android:id="@+id/autobusy_nocne1"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 521" />
+        <item
+            android:id="@+id/autobusy_nocne2"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 522"/>
+        <item
+            android:id="@+id/autobusy_nocne3"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 523" />
+        <item
+            android:id="@+id/autobusy_nocne4"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 524"/>
+        <item
+            android:id="@+id/autobusy_nocne5"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 525" />
+        <item
+            android:id="@+id/autobusy_nocne6"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 526"/>
+        <item
+            android:id="@+id/autobusy_nocne7"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 527" />
+        <item
+            android:id="@+id/autobusy_nocne8"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 528"/>
+        <item
+            android:id="@+id/autobusy_nocne9"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 529" />
+        <item
+            android:id="@+id/autobusy_nocne10"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 530"/>
+        <item
+            android:id="@+id/autobusy_nocne11"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 531" />
+        <item
+            android:id="@+id/autobusy_nocne12"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 532"/>
+        <item
+            android:id="@+id/autobusy_nocne13"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 533" />
+        <item
+            android:id="@+id/autobusy_nocne14"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 534"/>
+        <item
+            android:id="@+id/autobusy_nocne15"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 535" />
+        <item
+            android:id="@+id/autobusy_nocne16"
+            android:icon="@drawable/bus_ic"
+            android:title="Linia nr 536"/>
+        <item
+            android:id="@+id/back_autobusy_nocne"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
+        </group>
+</menu>

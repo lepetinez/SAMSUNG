@@ -2,6 +2,7 @@ package com.example.pc.laboversionone;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,9 +58,11 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     private final static String allStopsUrl = "http://www.zditm.szczecin.pl/json/slupki.inc.php";
     private final static String url = "http://www.zditm.szczecin.pl/json/pojazdy.inc.php";
     public TextView[] detailsText = new TextView[17];
+    View v;
     String singleBusData[] = new String[17];
     String stopInfo;
-    Timer timer = new Timer();
+    Timer linesTimer = new Timer();
+    Timer markerTimer = new Timer();
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
@@ -118,7 +121,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        initBusDetailsView();
         navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -142,6 +145,28 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.syncState();
     }
 
+    private void initBusDetailsView() {
+        v = getLayoutInflater().inflate(R.layout.bus_stop_info_layout, null);
+        detailsText[0] = (TextView) v.findViewById(R.id.textView1);
+        detailsText[1] = (TextView) v.findViewById(R.id.textView2);
+        detailsText[2] = (TextView) v.findViewById(R.id.linia1);
+        detailsText[3] = (TextView) v.findViewById(R.id.linia2);
+        detailsText[4] = (TextView) v.findViewById(R.id.linia3);
+        detailsText[5] = (TextView) v.findViewById(R.id.linia4);
+        detailsText[6] = (TextView) v.findViewById(R.id.linia5);
+        detailsText[7] = (TextView) v.findViewById(R.id.kierunek1);
+        detailsText[8] = (TextView) v.findViewById(R.id.kierunek2);
+        detailsText[9] = (TextView) v.findViewById(R.id.kierunek3);
+        detailsText[10] = (TextView) v.findViewById(R.id.kierunek4);
+        detailsText[11] = (TextView) v.findViewById(R.id.kierunek5);
+
+        detailsText[12] = (TextView) v.findViewById(R.id.godzina1);
+        detailsText[13] = (TextView) v.findViewById(R.id.godzina2);
+        detailsText[14] = (TextView) v.findViewById(R.id.godzina3);
+        detailsText[15] = (TextView) v.findViewById(R.id.godzina4);
+        detailsText[16] = (TextView) v.findViewById(R.id.godzina5);
+    }
+
     public void setWindowAdapteronMarkers() {
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
@@ -153,9 +178,9 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public View getInfoContents(Marker marker) {
                 if (marker.getTitle() != null) {
-                    stopInfo = "http://www.zditm.szczecin.pl/json/slupekkursy.inc.php?slupek=" + marker.getTitle();
+                    stopInfo = "http://www.zditm.szczecin.pl/json/slupekkursy.inc.php?slupek=" + marker.getSnippet();
                     try {
-                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(1300, TimeUnit.MILLISECONDS);
+                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(1000, TimeUnit.MILLISECONDS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -163,27 +188,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                     }
-
-                    View v = getLayoutInflater().inflate(R.layout.bus_stop_info_layout, null);
-                    detailsText[0] = (TextView) v.findViewById(R.id.textView1);
-                    detailsText[1] = (TextView) v.findViewById(R.id.textView2);
-                    detailsText[2] = (TextView) v.findViewById(R.id.linia1);
-                    detailsText[3] = (TextView) v.findViewById(R.id.linia2);
-                    detailsText[4] = (TextView) v.findViewById(R.id.linia3);
-                    detailsText[5] = (TextView) v.findViewById(R.id.linia4);
-                    detailsText[6] = (TextView) v.findViewById(R.id.linia5);
-                    detailsText[7] = (TextView) v.findViewById(R.id.kierunek1);
-                    detailsText[8] = (TextView) v.findViewById(R.id.kierunek2);
-                    detailsText[9] = (TextView) v.findViewById(R.id.kierunek3);
-                    detailsText[10] = (TextView) v.findViewById(R.id.kierunek4);
-                    detailsText[11] = (TextView) v.findViewById(R.id.kierunek5);
-
-                    detailsText[12] = (TextView) v.findViewById(R.id.godzina1);
-                    detailsText[13] = (TextView) v.findViewById(R.id.godzina2);
-                    detailsText[14] = (TextView) v.findViewById(R.id.godzina3);
-                    detailsText[15] = (TextView) v.findViewById(R.id.godzina4);
-                    detailsText[16] = (TextView) v.findViewById(R.id.godzina5);
-
 
                     detailsText[0].setText(singleBusData[0]);
                     detailsText[1].setText(singleBusData[1]);
@@ -208,24 +212,25 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
                     v.setMinimumWidth(600);
                     v.setMinimumHeight(500);
+                    rotateMarkers();
                     return v;
                 } else {
 
-                    View v = getLayoutInflater().inflate(R.layout.bus_or_tram_details, null);
+                    View view = getLayoutInflater().inflate(R.layout.bus_or_tram_details, null);
 
-                    TextView line = (TextView) v.findViewById(R.id.line);
-                    TextView from = (TextView) v.findViewById(R.id.from);
-                    TextView to = (TextView) v.findViewById(R.id.to);
-                    TextView late = (TextView) v.findViewById(R.id.late);
+                    TextView line = (TextView) view.findViewById(R.id.line);
+                    TextView from = (TextView) view.findViewById(R.id.from);
+                    TextView to = (TextView) view.findViewById(R.id.to);
+                    TextView late = (TextView) view.findViewById(R.id.late);
 
                     line.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4));
                     from.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 1));
                     to.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 2));
                     late.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 3));
 
-                    v.setMinimumWidth(765);
-                    v.setMinimumHeight(320);
-                    return v;
+                    view.setMinimumWidth(765);
+                    view.setMinimumHeight(320);
+                    return view;
                 }
 
             }
@@ -273,9 +278,11 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.tramwaje1:
                 showLine("1", "1");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje2:
                 showLine("2", "2");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje3:
                 showLine("3", "3");
@@ -577,19 +584,19 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showLine(final String line, String lineLine) {
-        timer.cancel();
-        timer = null;
-        timer = new Timer();
+        linesTimer.cancel();
+        linesTimer = null;
+        linesTimer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
-                public void run() {
+                    public void run() {
                         if (busesMarkers.size() != 0) {
                             busesDetailsList.clear();
-                            for (Marker m : busesMarkers) {
-                                m.remove();
+                            for (Marker busMarker : busesMarkers) {
+                                busMarker.remove();
                             }
                             busesMarkers.clear();
                         }
@@ -622,8 +629,46 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
         new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
         new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
-        timer.scheduleAtFixedRate(timerTask, 0, 30100);
+        linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
 
+
+    }
+    private void showBusesRotation(){
+        markerTimer.cancel();
+        markerTimer = null;
+        markerTimer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rotateMarkers();
+                    }
+                });
+            }
+        };
+        markerTimer.scheduleAtFixedRate(timerTask,1100,30100);
+    }
+    private void rotateMarkers() {
+        for (int i = 0; i < busesMarkers.size(); i++) {
+            LatLng firstPoint = busesMarkers.get(i).getPosition();
+            String destination = busesDetailsList.get((i * 4) + 2);
+            Location firstLocation = new Location(LocationManager.GPS_PROVIDER);
+            firstLocation.setLatitude(firstPoint.latitude);
+            firstLocation.setLongitude(firstPoint.longitude);
+            for (int j = 0; j < stopsMarkers.size(); j++) {
+                if (stopsMarkers.get(j).getTitle().equals(destination)) {
+                    LatLng secondPoint = stopsMarkers.get(j).getPosition();
+                    Location secondLocation = new Location(LocationManager.GPS_PROVIDER);
+                    secondLocation.setLatitude(secondPoint.latitude);
+                    secondLocation.setLongitude(secondPoint.longitude);
+                    float bearing = firstLocation.bearingTo(secondLocation);
+                    busesMarkers.get(i).setRotation(bearing);
+                    break;
+                }
+            }
+        }
     }
 
     @Override

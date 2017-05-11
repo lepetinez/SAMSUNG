@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
@@ -34,13 +35,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -212,7 +213,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
                     v.setMinimumWidth(600);
                     v.setMinimumHeight(500);
-                    rotateMarkers();
                     return v;
                 } else {
 
@@ -286,192 +286,255 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.tramwaje3:
                 showLine("3", "3");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje4:
                 showLine("4", "4");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje5:
                 showLine("5", "5");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje6:
                 showLine("6", "6");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje7:
                 showLine("7", "7");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje8:
                 showLine("8", "8");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje9:
                 showLine("9", "9");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje10:
                 showLine("10", "84");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje11:
                 showLine("11", "10");
+                showBusesRotation();
                 return true;
             case R.id.tramwaje12:
                 showLine("12", "11");
+                showBusesRotation();
                 return true;
             case R.id.autobusy1:
                 showLine("51", "12");
+                showBusesRotation();
                 return true;
             case R.id.autobusy2:
                 showLine("52", "13");
+                showBusesRotation();
                 return true;
             case R.id.autobusy3:
                 showLine("53", "14");
+                showBusesRotation();
                 return true;
             case R.id.autobusy4:
                 showLine("54", "15");
+                showBusesRotation();
                 return true;
             case R.id.autobusy5:
                 showLine("55", "16");
+                showBusesRotation();
                 return true;
             case R.id.autobusy6:
                 showLine("56", "16");
+                showBusesRotation();
                 return true;
             case R.id.autobusy7:
                 showLine("57", "19");
+                showBusesRotation();
                 return true;
             case R.id.autobusy8:
                 showLine("58", "20");
+                showBusesRotation();
                 return true;
             case R.id.autobusy9:
                 showLine("59", "21");
+                showBusesRotation();
                 return true;
             case R.id.autobusy10:
                 showLine("60", "22");
+                showBusesRotation();
                 return true;
             case R.id.autobusy11:
                 showLine("61", "23");
+                showBusesRotation();
                 return true;
             case R.id.autobusy12:
                 showLine("62", "24");
+                showBusesRotation();
                 return true;
             case R.id.autobusy13:
                 showLine("63", "25");
+                showBusesRotation();
                 return true;
             case R.id.autobusy14:
                 showLine("64", "26");
+                showBusesRotation();
                 return true;
             case R.id.autobusy15:
                 showLine("65", "27");
+                showBusesRotation();
                 return true;
             case R.id.autobusy16:
                 showLine("66", "28");
+                showBusesRotation();
                 return true;
             case R.id.autobusy17:
                 showLine("67", "29");
+                showBusesRotation();
                 return true;
             case R.id.autobusy18:
                 showLine("68", "30");
+                showBusesRotation();
                 return true;
             case R.id.autobusy19:
                 showLine("69", "31");
+                showBusesRotation();
                 return true;
             case R.id.autobusy20:
                 showLine("70", "32");
+                showBusesRotation();
                 return true;
             case R.id.autobusy21:
                 showLine("71", "33");
+                showBusesRotation();
                 return true;
             case R.id.autobusy22:
                 showLine("72", "94");
+                showBusesRotation();
                 return true;
             case R.id.autobusy23:
                 showLine("73", "35");
+                showBusesRotation();
                 return true;
             case R.id.autobusy24:
                 showLine("74", "36");
+                showBusesRotation();
                 return true;
             case R.id.autobusy25:
                 showLine("75", "37");
+                showBusesRotation();
                 return true;
             case R.id.autobusy26:
                 showLine("76", "38");
+                showBusesRotation();
                 return true;
             case R.id.autobusy27:
                 showLine("77", "39");
+                showBusesRotation();
                 return true;
             case R.id.autobusy28:
                 showLine("78", "40");
+                showBusesRotation();
                 return true;
             case R.id.autobusy29:
                 showLine("79", "41");
+                showBusesRotation();
                 return true;
             case R.id.autobusy30:
                 showLine("80", "42");
+                showBusesRotation();
                 return true;
             case R.id.autobusy31:
                 showLine("81", "43");
+                showBusesRotation();
                 return true;
             case R.id.autobusy32:
                 showLine("82", "44");
+                showBusesRotation();
                 return true;
             case R.id.autobusy33:
                 showLine("83", "79");
+                showBusesRotation();
                 return true;
             case R.id.autobusy34:
                 showLine("84", "45");
+                showBusesRotation();
                 return true;
             case R.id.autobusy35:
                 showLine("85", "17");
+                showBusesRotation();
                 return true;
             case R.id.autobusy36:
                 showLine("86", "85");
+                showBusesRotation();
                 return true;
             case R.id.autobusy37:
                 showLine("87", "46");
+                showBusesRotation();
                 return true;
             case R.id.autobusy38:
                 showLine("88", "86");
+                showBusesRotation();
                 return true;
             case R.id.autobusy39:
                 showLine("93", "34");
+                showBusesRotation();
                 return true;
             case R.id.autobusy40:
                 showLine("101", "47");
+                showBusesRotation();
                 return true;
             case R.id.autobusy41:
                 showLine("102", "48");
+                showBusesRotation();
                 return true;
             case R.id.autobusy42:
                 showLine("103", "49");
+                showBusesRotation();
                 return true;
             case R.id.autobusy43:
                 showLine("105", "91");
+                showBusesRotation();
                 return true;
             case R.id.autobusy44:
                 showLine("106", "50");
+                showBusesRotation();
                 return true;
             case R.id.autobusy45:
                 showLine("107", "51");
+                showBusesRotation();
                 return true;
             case R.id.autobusy46:
                 showLine("108", "92");
+                showBusesRotation();
                 return true;
             case R.id.autobusy47:
                 showLine("109", "52");
+                showBusesRotation();
                 return true;
             case R.id.autobusy48:
                 showLine("110", "53");
+                showBusesRotation();
                 return true;
             case R.id.autobusy49:
                 showLine("111", "54");
+                showBusesRotation();
                 return true;
             case R.id.autobusy50:
                 showLine("121", "90");
+                showBusesRotation();
                 return true;
             case R.id.autobusy51:
                 showLine("122", "89");
+                showBusesRotation();
                 return true;
             case R.id.autobusy52:
                 showLine("123", "87");
+                showBusesRotation();
                 return true;
             case R.id.autobusy53:
                 showLine("124", "100");
+                showBusesRotation();
                 return true;
             case R.id.back_dzienne_autobusy:
                 navigationView.getMenu().setGroupVisible(R.id.day_bus_group, false);
@@ -480,24 +543,31 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.autobusy_posp1:
                 showLine("311", "55");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_posp2:
                 showLine("302", "56");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_posp3:
                 showLine("403", "57");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_posp4:
                 showLine("404", "58");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_posp5:
                 showLine("405", "59");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_posp6:
                 showLine("306", "60");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_posp7:
                 showLine("407", "61");
+                showBusesRotation();
                 return true;
             case R.id.back_autobusy_posp:
                 navigationView.getMenu().setGroupVisible(R.id.pospieszne_bus_group, false);
@@ -506,51 +576,67 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.autobusy_nocne1:
                 showLine("521", "62");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne2:
                 showLine("522", "63");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne3:
                 showLine("523", "64");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne4:
                 showLine("524", "65");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne5:
                 showLine("525", "66");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne6:
                 showLine("526", "67");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne7:
                 showLine("527", "68");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne8:
                 showLine("528", "69");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne9:
                 showLine("529", "70");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne10:
                 showLine("530", "71");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne11:
                 showLine("531", "72");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne12:
                 showLine("532", "73");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne13:
                 showLine("533", "74");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne14:
                 showLine("534", "75");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne15:
                 showLine("535", "93");
+                showBusesRotation();
                 return true;
             case R.id.autobusy_nocne16:
                 showLine("536", "88");
+                showBusesRotation();
                 return true;
             case R.id.back_autobusy_nocne:
                 navigationView.getMenu().setGroupVisible(R.id.nocne_bus_group, false);
@@ -648,7 +734,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 });
             }
         };
-        markerTimer.scheduleAtFixedRate(timerTask,1100,30100);
+        markerTimer.scheduleAtFixedRate(timerTask,1200,30100);
     }
     private void rotateMarkers() {
         for (int i = 0; i < busesMarkers.size(); i++) {
@@ -671,6 +757,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -689,6 +776,15 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         }
 
         mMap.setPadding(0, 105, 0, 0);
+
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        if(hour > 22 || hour <6){
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.night_style_json));
+        }
+        else {
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.day_style_json));
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -734,11 +830,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Twoje aktualne położenie: ");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         Toast.makeText(MapsActivity.this, "Twoje Aktualne Położenie", Toast.LENGTH_LONG).show();

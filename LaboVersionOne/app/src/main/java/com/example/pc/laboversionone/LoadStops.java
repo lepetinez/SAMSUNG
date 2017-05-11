@@ -68,7 +68,8 @@ public class LoadStops extends AsyncTask<Object,Void, JSONArray> {
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_stop_icon_big));
-            markerOptions.title(id);
+            markerOptions.title(nazwa);
+            markerOptions.snippet(id);
             Marker marker = mMap.addMarker(markerOptions);
             busesStops.add(marker);
         }

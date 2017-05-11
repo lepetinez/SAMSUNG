@@ -19,7 +19,7 @@ import java.util.List;
 
 
 public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
-   // double currentLat;
+    // double currentLat;
     //double currentLon;
     private Context context;
     private GoogleMap mMap;
@@ -42,7 +42,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
             context = (Context) params[2];
             busMarkers = (List<Marker>)params[3];
             busesDetailsList = (List<String>) params[4];
-           // String urlStops = (String) params[3];
+            // String urlStops = (String) params[3];
             //currentLat = (Double) params[4];
             //currentLon = (Double) params[5];
 
@@ -66,7 +66,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
         DataParser busesParser = new DataParser(linia);
         List<HashMap<String, String>> busesData = null;
         try {
-          busesData = busesParser.busParser(jsonArray);
+            busesData = busesParser.busParser(jsonArray);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
     }
 
     private void searchForBuses(List<HashMap<String, String>> busesData) {
-        for (int i = 0; i < busesData.size(); i++) {
+        for (int i = 0; i <busesData.size(); i++) {
             Log.d("onPostExecute", "Entered into showing locations");
             MarkerOptions markerOptions = new MarkerOptions();
             HashMap<String, String> googlePlace = busesData.get(i);

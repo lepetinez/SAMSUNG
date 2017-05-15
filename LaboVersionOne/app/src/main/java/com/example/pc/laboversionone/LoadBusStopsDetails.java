@@ -1,9 +1,11 @@
 package com.example.pc.laboversionone;
 
 import android.os.AsyncTask;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 
 public class LoadBusStopsDetails extends AsyncTask<Object, Void, String[]> {
@@ -20,7 +22,21 @@ public class LoadBusStopsDetails extends AsyncTask<Object, Void, String[]> {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        if(doc == null){
+            singleBusData[0] = "wystapil blad. sprobuj ponownie za chwile";
+            for(int i = 0; i < 16;i++){
+                singleBusData[i+1] = "";
+            }
+            return singleBusData;
+        }
         Elements newsHeadlines = doc.getElementsByTag("strong");
+        if(newsHeadlines.size() == 0){
+            singleBusData[0] = "wystapil blad. sprobuj ponownie za chwile";
+            for(int i = 0; i < 16;i++){
+                singleBusData[i+1] = "";
+            }
+            return singleBusData;
+        }
         String label1 = newsHeadlines.get(0).text();
         singleBusData[0] = label1;
         if(newsHeadlines.size()== 2){
@@ -47,4 +63,5 @@ public class LoadBusStopsDetails extends AsyncTask<Object, Void, String[]> {
             return singleBusData;
         }
     }
+
 }

@@ -181,7 +181,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 if (marker.getTitle() != null) {
                     stopInfo = "http://www.zditm.szczecin.pl/json/slupekkursy.inc.php?slupek=" + marker.getSnippet();
                     try {
-                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(1000, TimeUnit.MILLISECONDS);
+                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(1500, TimeUnit.MILLISECONDS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -189,6 +189,8 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                     }
+                    v.setMinimumWidth(600);
+                    v.setMinimumHeight(500);
 
                     detailsText[0].setText(singleBusData[0]);
                     detailsText[1].setText(singleBusData[1]);
@@ -210,9 +212,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                     detailsText[14].setText(singleBusData[12]);
                     detailsText[15].setText(singleBusData[14]);
                     detailsText[16].setText(singleBusData[16]);
-
-                    v.setMinimumWidth(600);
-                    v.setMinimumHeight(500);
                     return v;
                 } else {
 
@@ -712,10 +711,10 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             stopsMarkers.clear();
             lineDrawing.clear();
         }
-
+        linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
         new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
         new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
-        linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
+
 
 
     }
@@ -734,7 +733,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 });
             }
         };
-        markerTimer.scheduleAtFixedRate(timerTask,1200,30100);
+        markerTimer.scheduleAtFixedRate(timerTask,2500,30100);
     }
     private void rotateMarkers() {
         for (int i = 0; i < busesMarkers.size(); i++) {

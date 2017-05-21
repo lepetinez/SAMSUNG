@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">busFinder</string>
+    <string name="app_name">Bus Finder</string>
     <string name = "drawer_opened">drawer opened</string>
     <string name = "drawer_closed">drawer closed</string>
     <string name="title_activity_maps">Map</string>

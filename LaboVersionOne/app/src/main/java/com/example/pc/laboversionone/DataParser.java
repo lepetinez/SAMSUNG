@@ -66,21 +66,4 @@ public class DataParser {
         }
         return stopsData;
     }
-   // public List<HashMap<String, String>> lineParse(JSONArray jsonObject) throws JSONException {
-        //int jsonLength = jsonArray.length();
-//        HashMap<String, String> tempMap;
-//        List<HashMap<String, String>> stopsData = new ArrayList<>();
-//        for (int i = 0; i < jsonLength; i++) {
-//            JSONObject tempObject = jsonArray.getJSONObject(i);
-//            tempMap = new HashMap<>();
-//            tempMap.put(ID, tempObject.getString(ID));
-//            tempMap.put(DLUGOSC_GEO, tempObject.getString(DLUGOSC_GEO));
-//            tempMap.put(SZEROKOSC_GEO, tempObject.getString(SZEROKOSC_GEO));
-//            tempMap.put(NAZWA, tempObject.getString(NAZWA));
-//            stopsData.add(tempMap);
-//
-//        }
-       // return stopsData;
-   // }
-
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_choos_mode"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.pc.laboversionone.ChoosModeActivity"
+    tools:showIn="@layout/activity_choos_mode"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#FFFFFF"
+        android:layout_weight = "1"
+        android:id="@+id/comunicationMode"
+        android:drawablePadding="-1sp"
+        android:text="Komunikacja">
+
+    </Button>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#FFFFFF"
+        android:id="@+id/placesMode"
+        android:drawablePadding="-1sp"
+        android:text="Miejsca"
+        android:layout_weight = "1"
+        android:textSize="14sp"
+        android:layout_below="@+id/comunicationMode">
+
+    </Button>
+</LinearLayout>

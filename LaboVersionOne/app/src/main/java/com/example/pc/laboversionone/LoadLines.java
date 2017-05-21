@@ -40,15 +40,16 @@ public class LoadLines extends AsyncTask<Object, Void, JSONObject> {
 
     private void drawLinePolyline(JSONObject jsonObject) {
         Polyline line;
-       // PolylineOptions options;
         JSONArray features = null;
+
         try {
             features = jsonObject.getJSONArray("features");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         for(int i = 0; i < features.length(); i++) {
-            PolylineOptions options = new PolylineOptions().width(7).color(Color.BLUE).visible(true);
+            PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).visible(true);
+
             JSONObject zero = null;
             try {
                 zero = features.getJSONObject(i);

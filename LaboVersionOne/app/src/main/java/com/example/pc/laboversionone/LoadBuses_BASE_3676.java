@@ -25,7 +25,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
     private GoogleMap mMap;
     private String linia;
     private JSONArray googleBusesOrTrams;
-    private List<Marker> busMarkers;
+    private List<Marker> busMarkers ;
     private List<String>busesDetailsList;
 
     public LoadBuses(String linia) {
@@ -79,7 +79,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
     }
 
     private void searchForBuses(List<HashMap<String, String>> busesData) {
-        for (int i = 0; i < busesData.size(); i++) {
+        for (int i = 0; i <busesData.size(); i++) {
             Log.d("onPostExecute", "Entered into showing locations");
             MarkerOptions markerOptions = new MarkerOptions();
             HashMap<String, String> googlePlace = busesData.get(i);
@@ -88,18 +88,15 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
             String linia = googlePlace.get("linia");
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
-
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.backround_marker));
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             markerOptions.snippet(Integer.toString(i));
-            Marker markerBackground =  mMap.addMarker(markerOptions);
-            busMarkers.add(markerBackground);
-            //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_foreground_marker));
-            //Marker markerForeground =  mMap.addMarker(markerOptions);
-            //busMarkersForeground.add(markerForeground);
+            Marker marker =  mMap.addMarker(markerOptions);
+            busMarkers.add(marker);
             busesDetailsList.add(googlePlace.get("linia"));
             busesDetailsList.add(googlePlace.get("z"));
             busesDetailsList.add(googlePlace.get("do"));
             busesDetailsList.add(googlePlace.get("punktualnosc1"));
+
         }
     }
 }

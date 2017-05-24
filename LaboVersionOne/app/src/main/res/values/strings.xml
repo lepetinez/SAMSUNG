@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">BusHunter</string>
+    <string name="app_name">Bus Finder</string>
     <string name="drawer_opened">drawer opened</string>
     <string name="drawer_closed">drawer closed</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_choos_mode">BusHunter</string>
+    <string name="title_activity_choos_mode">Bus Finder</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.pc.laboversionone;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,23 +15,27 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 /**
  * Created by Pc on 18.04.2017.
  */
 
-public class LoadStops extends AsyncTask<Object,Void, JSONArray> {
+public class LoadNearStops extends AsyncTask<Object, Void, JSONArray> {
 
-    private Context context;
+    private double currentLon;
+    private double currentLat;
     private GoogleMap mMap;
     private JSONArray googleStops;
-    private List<Marker> busesStops;
+    private List<Marker> nearBusesStops;
 
     @Override
     protected JSONArray doInBackground(Object... params) {
         mMap = (GoogleMap) params[0];
         String urlStops = (String) params[1];
-        context = (Context) params[2];
-        busesStops = (List<Marker>) params[3];
+        currentLon = (double) params[2];
+        currentLat = (double) params[3];
+        nearBusesStops = (List<Marker>) params[4];
 
         DownloadJsonData downloadJsonDataVehicle = new DownloadJsonData();
 
@@ -58,20 +61,22 @@ public class LoadStops extends AsyncTask<Object,Void, JSONArray> {
 
     private void searchForStops(List<HashMap<String, String>> stopsData) {
         for (int i = 0; i < stopsData.size(); i++) {
-            Log.d("onPostExecute", "Entered into showing locations");
-            MarkerOptions markerOptions = new MarkerOptions();
-            HashMap<String, String> googlePlace = stopsData.get(i);
-            double lat = Double.valueOf(googlePlace.get("szerokoscgeo"));
-            double lng = Double.valueOf(googlePlace.get("dlugoscgeo"));
-            String nazwa = googlePlace.get("nazwa");
-            String id = googlePlace.get("id");
-            LatLng latLng = new LatLng(lat, lng);
-            markerOptions.position(latLng);
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.new_bus_stop_icon));
-            markerOptions.title(nazwa);
-            markerOptions.snippet(id);
-            Marker marker = mMap.addMarker(markerOptions);
-            busesStops.add(marker);
+            if (abs(Double.valueOf(stopsData.get(i).get("szerokoscgeo"))- currentLat ) < 0.003 && abs(Double.valueOf(stopsData.get(i).get("dlugoscgeo"))- currentLon)  < 0.003) {
+                Log.d("onPostExecute", "Entered into showing locations");
+                MarkerOptions markerOptions = new MarkerOptions();
+                HashMap<String, String> googlePlace = stopsData.get(i);
+                double lat = Double.valueOf(googlePlace.get("szerokoscgeo"));
+                double lng = Double.valueOf(googlePlace.get("dlugoscgeo"));
+                String nazwa = googlePlace.get("nazwa");
+                String id = googlePlace.get("id");
+                LatLng latLng = new LatLng(lat, lng);
+                markerOptions.position(latLng);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.new_bus_stop_icon));
+                markerOptions.title(nazwa);
+                markerOptions.snippet(id);
+                Marker marker = mMap.addMarker(markerOptions);
+                nearBusesStops.add(marker);
+            }
         }
     }
 }

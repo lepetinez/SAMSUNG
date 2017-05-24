@@ -20,7 +20,7 @@ public class PlacesDataParser {
 
         try {
             Log.d("Places", "parse");
-            jsonObject = new JSONObject((String) jsonData);
+            jsonObject = new JSONObject(jsonData);
             jsonArray = jsonObject.getJSONArray("results");
         } catch (JSONException e) {
             Log.d("Places", "parse error");
@@ -56,6 +56,8 @@ public class PlacesDataParser {
         String latitude = "";
         String longitude = "";
         String reference = "";
+        double rating = 0;
+        boolean open_now = false;
 
         Log.d("getPlace", "Entered");
 
@@ -66,6 +68,21 @@ public class PlacesDataParser {
             if (!googlePlaceJson.isNull("vicinity")) {
                 vicinity = googlePlaceJson.getString("vicinity");
             }
+            if (!googlePlaceJson.isNull("rating")) {
+                rating = googlePlaceJson.getDouble("rating");
+            }
+            if(!googlePlaceJson.isNull("opening_hours")){
+                open_now = googlePlaceJson.getJSONObject("opening_hours").getBoolean("open_now");
+                if(open_now){
+                    googlePlaceMap.put("open_now","tak");
+                }
+                else{
+                    googlePlaceMap.put("open_now","nie");
+                }
+            }
+            if(googlePlaceJson.isNull("opening_hours")){
+                googlePlaceJson.put("open_now","brak danych");
+            }
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = googlePlaceJson.getString("reference");
@@ -74,6 +91,7 @@ public class PlacesDataParser {
             googlePlaceMap.put("lat", latitude);
             googlePlaceMap.put("lng", longitude);
             googlePlaceMap.put("reference", reference);
+            googlePlaceMap.put("rating",String.valueOf(rating));
             Log.d("getPlace", "Putting Places");
         } catch (JSONException e) {
             Log.d("getPlace", "Error");

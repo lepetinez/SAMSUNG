@@ -11,8 +11,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,10 +26,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -39,7 +44,8 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     double latitude;
     double longitude;
-    private int PROXIMITY_RADIUS = 10000;
+    private List<String> placesDetailsList = new ArrayList<>();
+    private int PROXIMITY_RADIUS = 20000;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
@@ -69,7 +75,7 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         ImageView icon = new ImageView(this); // Create an icon
-        icon.setImageDrawable(getDrawable(R.drawable.back_icon));
+        icon.setImageDrawable(getDrawable(R.drawable.add_icon));
 
         FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(icon)
@@ -79,20 +85,153 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         ImageView itemIcon = new ImageView(this);
         ImageView itemIcon2 = new ImageView(this);
         ImageView itemIcon3 = new ImageView(this);
-        itemIcon2.setImageDrawable(getDrawable(R.drawable.tram_ic));
-        itemIcon.setImageDrawable(getDrawable(R.drawable.bus_ic) );
-        itemIcon3.setImageDrawable(getDrawable(R.drawable.bus_ic) );
-        SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
+        ImageView itemIcon4 = new ImageView(this);
+        ImageView itemIcon5 = new ImageView(this);
 
+        itemIcon2.setImageDrawable(getDrawable(R.drawable.pub_icon));
+        itemIcon.setImageDrawable(getDrawable(R.drawable.restaurant_icon) );
+        itemIcon3.setImageDrawable(getDrawable(R.drawable.disco_icon) );
+        itemIcon4.setImageDrawable(getDrawable(R.drawable.fun_icon));
+        itemIcon5.setImageDrawable(getDrawable(R.drawable.culture_icon));
+
+        SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
         SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();
         SubActionButton button3 = itemBuilder.setContentView(itemIcon3).build();
+        SubActionButton button4 = itemBuilder.setContentView(itemIcon4).build();
+        SubActionButton button5 = itemBuilder.setContentView(itemIcon5).build();
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3, 120,120)
+                .addSubActionView(button1,150,150)
+                .addSubActionView(button2,150,150)
+                .addSubActionView(button3,150,150)
+                .addSubActionView(button4,150,150)
+                .addSubActionView(button5,150,150)
+                .setStartAngle(285)
+                .setEndAngle(165)
                 .attachTo(actionButton)
                 .build();
 
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Restaurant = "restauracja";
+                Log.d("onClick", "Button is Clicked");
+                    mMap.clear();
+                    placesDetailsList.clear();
+                    String url = getUrl(latitude, longitude, Restaurant);
+                    Object[] DataTransfer = new Object[3];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = placesDetailsList;
+                    Log.d("onClick", url);
+                    GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                    getNearbyPlacesData.execute(DataTransfer);
+                    Toast.makeText(MapsPlacesActivity.this,"Pobliskie restauracje", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Restaurant = "pub";
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                placesDetailsList.clear();
+                String url = getUrl(latitude, longitude, Restaurant);
+                Object[] DataTransfer = new Object[3];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                DataTransfer[2] = placesDetailsList;
+                Log.d("onClick", url);
+                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsPlacesActivity.this,"Pobliskie puby", Toast.LENGTH_LONG).show();
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Restaurant = "klub";
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                placesDetailsList.clear();
+                String url = getUrl(latitude, longitude, Restaurant);
+                Object[] DataTransfer = new Object[3];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                DataTransfer[2] = placesDetailsList;
+                Log.d("onClick", url);
+                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsPlacesActivity.this,"Pobliskie kluby", Toast.LENGTH_LONG).show();
+            }
+        });
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Restaurant = "atrakcje";
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                placesDetailsList.clear();
+                String url = getUrl(latitude, longitude, Restaurant);
+                Object[] DataTransfer = new Object[3];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                DataTransfer[2] = placesDetailsList;
+                Log.d("onClick", url);
+                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsPlacesActivity.this,"Pobliskie atrakcje", Toast.LENGTH_LONG).show();
+            }
+        });
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Restaurant = "kultura";
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                placesDetailsList.clear();
+                String url = getUrl(latitude, longitude, Restaurant);
+                Object[] DataTransfer = new Object[3];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                DataTransfer[2] = placesDetailsList;
+                Log.d("onClick", url);
+                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsPlacesActivity.this,"Pobliskie muzea, wystawy", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+    public void setWindowAdapteronMarkers() {
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                    View view = getLayoutInflater().inflate(R.layout.places_details, null);
+
+                    TextView nazwa = (TextView) view.findViewById(R.id.nazwa_miejsca);
+                    TextView adres= (TextView) view.findViewById(R.id.adres);
+                    TextView czynne = (TextView) view.findViewById(R.id.czynne);
+                    TextView ocena = (TextView) view.findViewById(R.id.ocena);
+
+                    nazwa.setText(placesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4));
+                    adres.setText(placesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 1));
+                    czynne.setText(placesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 2));
+                    ocena.setText(placesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 3));
+
+                    view.setMinimumWidth(765);
+                    view.setMinimumHeight(320);
+                    return view;
+                }
+
+        });
     }
 
     private boolean CheckGooglePlayServices() {
@@ -111,9 +250,8 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
-        //Initialize Google Play Services
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setWindowAdapteronMarkers();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -126,60 +264,14 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-
-        Button btnRestaurant = (Button) findViewById(R.id.btnRestaurant);
-        btnRestaurant.setOnClickListener(new View.OnClickListener() {
-            String Restaurant = "restaurant";
-            @Override
-            public void onClick(View v) {
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                String url = getUrl(latitude, longitude, Restaurant);
-                Object[] DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Nearby Restaurants", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        Button btnHospital = (Button) findViewById(R.id.btnHospital);
-        btnHospital.setOnClickListener(new View.OnClickListener() {
-            String Hospital = "hospital";
-            @Override
-            public void onClick(View v) {
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                String url = getUrl(latitude, longitude, Hospital);
-                Object[] DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Nearby Hospitals", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        Button btnSchool = (Button) findViewById(R.id.btnSchool);
-        btnSchool.setOnClickListener(new View.OnClickListener() {
-            String School = "school";
-            @Override
-            public void onClick(View v) {
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                String url = getUrl(latitude, longitude, School);
-                Object[] DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Nearby Schools", Toast.LENGTH_LONG).show();
-            }
-        });
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        if(hour > 22 || hour <6){
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.night_style_json));
+        }
+        else {
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.day_style_json));
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -209,7 +301,7 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlacesUrl.append("location=" + latitude + "," + longitude);
         googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&type=" + nearbyPlace);
+        googlePlacesUrl.append("&keyword=" + nearbyPlace);
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key=" + "AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0");
         Log.d("getUrl", googlePlacesUrl.toString());
@@ -230,18 +322,14 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
             mCurrLocationMarker.remove();
         }
 
-        //Place current location marker
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-        Toast.makeText(MapsPlacesActivity.this,"Your Current Location", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(MapsPlacesActivity.this,"Twoje aktualne polozenie :", Toast.LENGTH_LONG).show();
         Log.d("onLocationChanged", String.format("latitude:%.3f longitude:%.3f",latitude,longitude));
 
-        //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             Log.d("onLocationChanged", "Removing Location Updates");
@@ -261,22 +349,15 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Asking user if explanation is needed
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
 
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
@@ -292,12 +373,9 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted. Do the
-                    // contacts-related task you need to do.
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
@@ -310,7 +388,6 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
 
                 } else {
 
-                    // Permission denied, Disable the functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;

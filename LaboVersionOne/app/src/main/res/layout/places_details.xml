@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:text="Nazwa:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView11"
+            android:textSize="12sp" />
+
+        <TextView
+            android:text="12"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/nazwa_miejsca"
+            android:textSize="12sp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:text="Adres:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViev22"
+            android:textSize="12sp" />
+
+        <TextView
+            android:text="Mirego"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/adres"
+            android:textSize="12sp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp">
+        <TextView
+            android:text="Czynne:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView33"
+            android:textSize="12sp" />
+
+        <TextView
+            android:text="Kosciuszki"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/czynne"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp">
+        <TextView
+            android:text="Ocena:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView44"
+            android:textSize="12sp" />
+
+        <TextView
+            android:text="Opozniony 2 minuty"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/ocena"
+            android:textSize="12sp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+</LinearLayout>

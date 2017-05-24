@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 public class ChoosModeActivity extends AppCompatActivity {
 
@@ -16,7 +16,7 @@ public class ChoosModeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final Button comunicationButton = (Button) findViewById(R.id.comunicationMode);
+        final ImageButton comunicationButton = (ImageButton) findViewById(R.id.comunicationMode);
         comunicationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -25,7 +25,7 @@ public class ChoosModeActivity extends AppCompatActivity {
 
             }
         });
-        final Button placesButton = (Button) findViewById(R.id.placesMode);
+        final ImageButton placesButton = (ImageButton) findViewById(R.id.placesMode);
         placesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -12,28 +12,108 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.pc.laboversionone.ChoosModeActivity"
     tools:showIn="@layout/activity_choos_mode"
+    android:background="#D3D3D3"
     android:orientation="vertical">
 
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="#FFFFFF"
-        android:layout_weight = "1"
-        android:id="@+id/comunicationMode"
-        android:drawablePadding="-1sp"
-        android:text="Komunikacja">
+        android:layout_weight="1"
+        >
 
-    </Button>
-    <Button
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#000000"
+            android:layout_weight = "1"
+            android:background="#FFFFFF"
+            android:id="@+id/comunicationMode"
+            android:drawablePadding="20sp"
+            android:text="Komunikacja"
+            android:textAllCaps="false"
+            android:src = "@drawable/bus_stop"
+            android:textStyle="normal|bold|italic"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:fontFamily="cursive"
+            android:elevation="0dp"
+            android:cursorVisible="false"
+            android:layout_marginBottom="5dp"
+            android:scrollY="20dp">
+
+        </ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Komunikacja"
+            android:textSize="35sp"
+            android:layout_centerInParent="false"
+            android:layout_marginBottom="27dp"
+            android:fontFamily="cursive"
+            android:textStyle="normal|bold|italic"
+            android:textAlignment="center"
+            android:typeface="normal"
+            android:textAllCaps="false"
+            android:layout_alignBottom="@+id/comunicationMode"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    >
+
+        <ImageButton
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
+        android:background="#FFFFFF"
+        android:src = "@drawable/map_pointer"
         android:id="@+id/placesMode"
-        android:drawablePadding="-1sp"
-        android:text="Miejsca"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_weight = "1"
-        android:textSize="14sp"
-        android:layout_below="@+id/comunicationMode">
+        android:textSize="30sp"
+        android:textAllCaps="false"
+        android:textStyle="normal|bold|italic"
+        android:typeface="normal"
+        android:fontFamily="cursive"
+        android:elevation="0dp"
+        android:paddingBottom="0dp"
+            android:baselineAlignBottom="false"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="false"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="false"
+            android:saveEnabled="false"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:scrollX="0dp"
+            android:scrollY="20dp">
 
-    </Button>
+    </ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Miejsca"
+            android:textSize="35sp"
+            android:layout_centerInParent="false"
+            android:layout_marginBottom="27dp"
+            android:fontFamily="cursive"
+            android:textStyle="normal|bold|italic"
+            android:textAlignment="center"
+            android:typeface="normal"
+            android:textAllCaps="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
 </LinearLayout>

@@ -1,6 +1,9 @@
 package com.example.pc.laboversionone;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -22,6 +25,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +41,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -49,10 +58,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+
 public class MapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
-
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final String lineRoute = "http://www.zditm.szczecin.pl/json/trasy.inc.php?gmvid=";
     private final static String lineStopsUrl = "http://www.zditm.szczecin.pl/json/slupki.inc.php?linia=";
@@ -62,6 +71,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     View v;
     String singleBusData[] = new String[17];
     String stopInfo;
+    EditText editText;
     Timer linesTimer = new Timer();
     Timer markerTimer = new Timer();
     GoogleApiClient mGoogleApiClient;
@@ -72,7 +82,11 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     double longitude;
     NavigationView navigationView;
     Toolbar mToolbar;
+    private Marker destinationMarker;
+    private boolean firstBusesStart = true;
     private String line;
+    private LinearLayout searchBar;
+    private List<Marker> nearBusesMarkers = new ArrayList<>();
     private List<String> busesDetailsList = new ArrayList<>();
     private List<Marker> busesMarkers = new ArrayList<>();
     private List<Marker> stopsMarkers = new ArrayList<>();
@@ -92,6 +106,9 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         MultiDex.install(this);
+        searchBar = (LinearLayout) findViewById(R.id.place_search_bar);
+        searchBar.setVisibility(View.INVISIBLE);
+        FloatingActionButton searchPlaces = (FloatingActionButton) findViewById(R.id.search_place);
         FloatingActionButton zoomIn = (FloatingActionButton) findViewById(R.id.zoom_in);
         FloatingActionButton zoomOut = (FloatingActionButton) findViewById(R.id.zoom_out);
         zoomIn.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +126,13 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        searchPlaces.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                searchBar.setVisibility(View.VISIBLE);
+            }
+        });
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -121,7 +145,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        editText = (EditText) findViewById(R.id.editText);
         initBusDetailsView();
         navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -181,7 +205,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 if (marker.getTitle() != null) {
                     stopInfo = "http://www.zditm.szczecin.pl/json/slupekkursy.inc.php?slupek=" + marker.getSnippet();
                     try {
-                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(1500, TimeUnit.MILLISECONDS);
+                        new LoadBusStopsDetails().execute(singleBusData, stopInfo, detailsText).get(2500, TimeUnit.MILLISECONDS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -231,7 +255,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                     view.setMinimumHeight(320);
                     return view;
                 }
-
             }
         });
     }
@@ -669,6 +692,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showLine(final String line, String lineLine) {
+        firstBusesStart = true;
         linesTimer.cancel();
         linesTimer = null;
         linesTimer = new Timer();
@@ -678,14 +702,24 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (busesMarkers.size() != 0) {
-                            busesDetailsList.clear();
-                            for (Marker busMarker : busesMarkers) {
-                                busMarker.remove();
+                        if (!firstBusesStart) {
+                            if (busesMarkers.size() == 0) {
+                                return;
+                            } else {
+                                busesDetailsList.clear();
+                                for (Marker busMarker : busesMarkers) {
+                                    busMarker.remove();
+                                }
+                                busesMarkers.clear();
+                                new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
                             }
-                            busesMarkers.clear();
+                        } else {
+                            new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
                         }
-                        new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
+                        if (firstBusesStart) {
+                            firstBusesStart = false;
+                        }
+
                     }
                 });
             }
@@ -716,9 +750,9 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
 
 
-
     }
-    private void showBusesRotation(){
+
+    private void showBusesRotation() {
         markerTimer.cancel();
         markerTimer = null;
         markerTimer = new Timer();
@@ -733,8 +767,9 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 });
             }
         };
-        markerTimer.scheduleAtFixedRate(timerTask,2500,30100);
+        markerTimer.scheduleAtFixedRate(timerTask, 3000, 30100);
     }
+
     private void rotateMarkers() {
         for (int i = 0; i < busesMarkers.size(); i++) {
             LatLng firstPoint = busesMarkers.get(i).getPosition();
@@ -756,10 +791,51 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void onMapSearch(View view) {
+        editText.clearFocus();
+        InputMethodManager in = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        if (destinationMarker != null) {
+            destinationMarker.remove();
+        }
+        EditText locationSearch = (EditText) findViewById(R.id.editText);
+        String location = locationSearch.getText().toString();
+        List<Address> addressList = null;
+        location += "Szczecin";
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (addressList.size() == 0) {
+                Toast.makeText(this, "Nie znaleziono podanego adresu", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng).title("Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.place_dest));
+            destinationMarker = mMap.addMarker(markerOptions);
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            searchBar.setVisibility(View.INVISIBLE);
+
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                searchBar.setVisibility(View.INVISIBLE);
+            }
+        });
+
         setWindowAdapteronMarkers();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -778,12 +854,22 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
-        if(hour > 22 || hour <6){
-            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.night_style_json));
-        }
-        else {
+        if (hour > 22 || hour < 6) {
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.night_style_json));
+        } else {
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.day_style_json));
         }
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if (nearBusesMarkers != null) {
+                    for (Marker busMarker : nearBusesMarkers) {
+                        busMarker.remove();
+                    }
+                }
+                new LoadNearStops().execute(mMap, allStopsUrl, latLng.longitude, latLng.latitude, nearBusesMarkers);
+            }
+        });
     }
 
     protected synchronized void buildGoogleApiClient() {

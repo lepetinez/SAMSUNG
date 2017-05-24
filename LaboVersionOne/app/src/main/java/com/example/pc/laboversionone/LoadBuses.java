@@ -88,7 +88,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
             String linia = googlePlace.get("linia");
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_foreground));
             markerOptions.snippet(Integer.toString(i));
             Marker marker =  mMap.addMarker(markerOptions);
             busMarkers.add(marker);

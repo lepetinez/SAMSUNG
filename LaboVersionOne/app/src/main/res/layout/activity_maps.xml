@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     >
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -31,6 +32,31 @@
         android:layout_margin="16dp"
         app:backgroundTint="@android:color/white" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/magnifier"
+        android:id="@+id/search_place"
+        app:backgroundTint="@android:color/holo_red_light"
+        android:layout_centerInParent="false"
+        android:layout_above="@+id/zoom_in"
+        android:layout_alignLeft="@+id/zoom_in"
+        android:layout_alignStart="@+id/zoom_in"
+        android:layout_marginBottom="11dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/zoom_in"
+        android:id="@+id/zoom_in"
+        app:backgroundTint="@android:color/white"
+        android:layout_centerInParent="false"
+        android:layout_above="@+id/zoom_out"
+        android:layout_alignLeft="@+id/zoom_out"
+        android:layout_alignStart="@+id/zoom_out" />
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -41,17 +67,44 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:srcCompat="@drawable/zoom_in"
-        android:id="@+id/zoom_in"
-        app:backgroundTint="@android:color/white"
-        android:layout_above="@+id/zoom_out"
-        android:layout_alignLeft="@+id/zoom_out"
-        android:layout_alignStart="@+id/zoom_out"
-        android:layout_centerInParent="false" />
+    <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+        android:id = "@+id/place_search_bar"
+        android:orientation="horizontal"
+        android:elevation="1dp"
+
+        android:background="@color/wallet_hint_foreground_holo_light"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+       <EditText
+           android:id="@+id/editText"
+           android:layout_width="wrap_content"
+           android:layout_height="match_parent"
+           android:layout_weight="3.63"
+           android:hint="Wpisz lokalizacje.."
+           android:imeOptions="actionSearch"
+           android:backgroundTint="@color/wallet_hint_foreground_holo_light"
+           android:elevation="1dp"
+           android:background="@color/cast_intro_overlay_button_background_color"
+           android:layout_marginLeft="5dp" />
+
+
+       <Button
+           android:id="@+id/search_button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_weight="0.5"
+           android:backgroundTint = "@android:color/holo_red_light"
+           android:onClick="onMapSearch"
+           android:text="Szukaj"
+           android:layout_marginRight="5dp"
+           android:fontFamily="sans-serif-smallcaps" />
+
+   </LinearLayout>
+
 </RelativeLayout>
 
     <android.support.design.widget.NavigationView

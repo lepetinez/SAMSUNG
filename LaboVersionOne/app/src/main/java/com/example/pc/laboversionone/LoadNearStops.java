@@ -71,7 +71,7 @@ public class LoadNearStops extends AsyncTask<Object, Void, JSONArray> {
                 String id = googlePlace.get("id");
                 LatLng latLng = new LatLng(lat, lng);
                 markerOptions.position(latLng);
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.new_bus_stop_icon));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_stop_icon));
                 markerOptions.title(nazwa);
                 markerOptions.snippet(id);
                 Marker marker = mMap.addMarker(markerOptions);

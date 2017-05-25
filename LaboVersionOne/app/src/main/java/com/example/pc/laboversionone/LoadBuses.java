@@ -88,14 +88,11 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
             String linia = googlePlace.get("linia");
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
-
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.backround_marker));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_foreground_marker));
             markerOptions.snippet(Integer.toString(i));
+            markerOptions.zIndex(1);
             Marker markerBackground =  mMap.addMarker(markerOptions);
             busMarkers.add(markerBackground);
-            //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_foreground_marker));
-            //Marker markerForeground =  mMap.addMarker(markerOptions);
-            //busMarkersForeground.add(markerForeground);
             busesDetailsList.add(googlePlace.get("linia"));
             busesDetailsList.add(googlePlace.get("z"));
             busesDetailsList.add(googlePlace.get("do"));

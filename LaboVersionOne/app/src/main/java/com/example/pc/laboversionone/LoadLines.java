@@ -86,6 +86,7 @@ public class LoadLines extends AsyncTask<Object, Void, JSONObject> {
                 }
             }
             line = mMap.addPolyline(options);
+            line.setZIndex(1);
             lineList.add(line);
         }
 

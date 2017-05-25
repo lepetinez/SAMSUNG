@@ -4,4 +4,8 @@
     <string name="drawer_closed">drawer closed</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_choos_mode">Bus Finder</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -9,9 +9,7 @@
             android:title="Komunikacja" />
     </group>
     <group android:checkableBehavior="single"
-        android:id="@+id/main_group"
-        >
-
+        android:id="@+id/main_group">
         <item
             android:id="@+id/tramwaje"
             android:icon="@drawable/tram_ic"
@@ -26,6 +24,10 @@
         android:id="@+id/bus_category_group"
         android:visible="false">
         <item
+            android:id="@+id/back_autobusy"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
+        <item
             android:id="@+id/Dzienne"
             android:icon="@drawable/dzien"
             android:title="Dzienne" />
@@ -37,14 +39,14 @@
             android:id="@+id/Nocne"
             android:icon="@drawable/noc"
             android:title="Nocne" />
-        <item
-            android:id="@+id/back_autobusy"
-            android:icon="@drawable/back_icon"
-            android:title="Cofnij" />
     </group>
     <group android:checkableBehavior="single"
         android:id = "@+id/tram_group"
         android:visible="false">
+        <item
+            android:id="@+id/cofnij_tramwaje"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
         <item
             android:id="@+id/tramwaje1"
             android:icon="@drawable/tram_ic"
@@ -93,14 +95,14 @@
             android:id="@+id/tramwaje12"
             android:icon="@drawable/tram_ic"
             android:title="Linia nr 12" />
-        <item
-            android:id="@+id/cofnij_tramwaje"
-            android:icon="@drawable/back_icon"
-            android:title="Cofnij" />
     </group>
     <group android:checkableBehavior="single"
         android:id = "@+id/day_bus_group"
         android:visible="false">
+        <item
+            android:id="@+id/back_dzienne_autobusy"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
         <item
             android:id="@+id/autobusy1"
             android:icon="@drawable/bus_ic"
@@ -313,14 +315,14 @@
             android:id="@+id/autobusy53"
             android:icon="@drawable/bus_ic"
             android:title="Linia nr 124" />
-        <item
-            android:id="@+id/back_dzienne_autobusy"
-            android:icon="@drawable/back_icon"
-            android:title="Cofnij" />
      </group>
     <group android:checkableBehavior="single"
             android:id = "@+id/pospieszne_bus_group"
             android:visible="false">
+        <item
+            android:id="@+id/back_autobusy_posp"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
         <item
             android:id="@+id/autobusy_posp1"
             android:icon="@drawable/bus_ic"
@@ -349,15 +351,15 @@
             android:id="@+id/autobusy_posp7"
             android:icon="@drawable/bus_ic"
             android:title="Linia G" />
-        <item
-            android:id="@+id/back_autobusy_posp"
-            android:icon="@drawable/back_icon"
-            android:title="Cofnij" />
     </group>
 
     <group android:checkableBehavior="single"
         android:id = "@+id/nocne_bus_group"
         android:visible="false">
+        <item
+            android:id="@+id/back_autobusy_nocne"
+            android:icon="@drawable/back_icon"
+            android:title="Cofnij" />
         <item
             android:id="@+id/autobusy_nocne1"
             android:icon="@drawable/bus_ic"
@@ -422,9 +424,5 @@
             android:id="@+id/autobusy_nocne16"
             android:icon="@drawable/bus_ic"
             android:title="Linia nr 536"/>
-        <item
-            android:id="@+id/back_autobusy_nocne"
-            android:icon="@drawable/back_icon"
-            android:title="Cofnij" />
         </group>
 </menu>

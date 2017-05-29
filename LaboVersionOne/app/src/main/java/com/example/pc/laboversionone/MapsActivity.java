@@ -748,8 +748,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
         new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
         new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
-
-
     }
 
     private void showBusesRotation() {
@@ -817,7 +815,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng).title("Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.place_dest));
+            markerOptions.position(latLng).title("Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             destinationMarker = mMap.addMarker(markerOptions);
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             searchBar.setVisibility(View.INVISIBLE);

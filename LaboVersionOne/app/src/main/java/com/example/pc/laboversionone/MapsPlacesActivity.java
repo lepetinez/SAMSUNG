@@ -75,7 +75,7 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         ImageView icon = new ImageView(this); // Create an icon
-        icon.setImageDrawable(getDrawable(R.drawable.add_icon));
+        icon.setImageDrawable(getDrawable(R.mipmap.add_icon));
 
         FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(icon)
@@ -88,11 +88,11 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         ImageView itemIcon4 = new ImageView(this);
         ImageView itemIcon5 = new ImageView(this);
 
-        itemIcon2.setImageDrawable(getDrawable(R.drawable.pub_icon));
-        itemIcon.setImageDrawable(getDrawable(R.drawable.restaurant_icon) );
-        itemIcon3.setImageDrawable(getDrawable(R.drawable.disco_icon) );
-        itemIcon4.setImageDrawable(getDrawable(R.drawable.fun_icon));
-        itemIcon5.setImageDrawable(getDrawable(R.drawable.culture_icon));
+        itemIcon2.setImageDrawable(getDrawable(R.mipmap.pub_icon));
+        itemIcon.setImageDrawable(getDrawable(R.mipmap.restaurant_icon) );
+        itemIcon3.setImageDrawable(getDrawable(R.mipmap.disco_icon) );
+        itemIcon4.setImageDrawable(getDrawable(R.mipmap.fun_icon));
+        itemIcon5.setImageDrawable(getDrawable(R.mipmap.culture_icon));
 
         SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
         SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();

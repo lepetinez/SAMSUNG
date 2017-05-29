@@ -93,6 +93,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     private List<Polyline> lineDrawing = new ArrayList<>();
     private GoogleMap mMap;
 
+    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -100,7 +101,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -115,17 +116,15 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 mMap.animateCamera(CameraUpdateFactory.zoomBy(2));
-
             }
         });
         zoomOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMap.animateCamera(CameraUpdateFactory.zoomBy(-2));
-
-
             }
         });
+
         searchPlaces.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -150,7 +149,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.drawer_opened, R.string.drawer_closed) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_opened, R.string.drawer_closed) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -166,7 +165,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 syncState();
             }
         };
-        drawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
     }
 
@@ -748,6 +747,8 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
         new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
         new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
+
+        mDrawerLayout.closeDrawers();
     }
 
     private void showBusesRotation() {
@@ -820,7 +821,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             destinationMarker = mMap.addMarker(markerOptions);
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             searchBar.setVisibility(View.INVISIBLE);
-
         }
     }
 
@@ -858,6 +858,8 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         } else {
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.day_style_json));
         }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.424212, 14.571040), 11.0f)); // Szczecin -> LatLng(53.424212, 14.571040)
+
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {

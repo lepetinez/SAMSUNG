@@ -266,7 +266,7 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         }
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
-        if(hour > 22 || hour <6){
+        if(hour > 22 || hour < 6){
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.night_style_json));
         }
         else {

@@ -70,6 +70,7 @@ public class LoadStops extends AsyncTask<Object,Void, JSONArray> {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_stop_icon));
             markerOptions.title(nazwa);
             markerOptions.snippet(id);
+            markerOptions.zIndex(1.0f);
             Marker marker = mMap.addMarker(markerOptions);
             busesStops.add(marker);
         }

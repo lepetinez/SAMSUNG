@@ -19,4 +19,5 @@
 .idea/modules.xml
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
+.idea/gradle.xml
 *.iml

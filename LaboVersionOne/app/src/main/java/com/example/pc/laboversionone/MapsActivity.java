@@ -816,6 +816,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng).title("Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerOptions.zIndex(3.0f);
             destinationMarker = mMap.addMarker(markerOptions);
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             searchBar.setVisibility(View.INVISIBLE);

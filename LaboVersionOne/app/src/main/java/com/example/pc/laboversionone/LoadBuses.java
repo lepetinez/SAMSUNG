@@ -90,7 +90,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
             markerOptions.position(latLng);
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_foreground_marker));
             markerOptions.snippet(Integer.toString(i));
-            markerOptions.zIndex(1);
+            markerOptions.zIndex(2.0f);
             Marker markerBackground =  mMap.addMarker(markerOptions);
             busMarkers.add(markerBackground);
             busesDetailsList.add(googlePlace.get("linia"));

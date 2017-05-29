@@ -272,6 +272,8 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         else {
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.day_style_json));
         }
+
+        mMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
     protected synchronized void buildGoogleApiClient() {

@@ -770,7 +770,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void rotateMarkers() {
-        for (int i = 0; i < busesMarkers.size(); i++) {
+        for (int i = 0; i < busesMarkers.size(); i += 2) {
             LatLng firstPoint = busesMarkers.get(i).getPosition();
             String destination = busesDetailsList.get((i * 4) + 2);
             Location firstLocation = new Location(LocationManager.GPS_PROVIDER);
@@ -871,6 +871,8 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 new LoadNearStops().execute(mMap, allStopsUrl, latLng.longitude, latLng.latitude, nearBusesMarkers);
             }
         });
+
+        mMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
     protected synchronized void buildGoogleApiClient() {

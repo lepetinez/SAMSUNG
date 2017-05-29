@@ -88,7 +88,7 @@ public class LoadBuses extends AsyncTask<Object, String, JSONArray> {
             String linia = googlePlace.get("linia");
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_foreground_marker));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus_marker)); //temporary, TODO: two markers in the same position to avoid rotating the bus icon inside the marker
             markerOptions.snippet(Integer.toString(i));
             markerOptions.zIndex(2.0f);
             Marker markerBackground =  mMap.addMarker(markerOptions);

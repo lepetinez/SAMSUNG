@@ -6,6 +6,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -691,64 +693,69 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showLine(final String line, String lineLine) {
-        firstBusesStart = true;
-        linesTimer.cancel();
-        linesTimer = null;
-        linesTimer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!firstBusesStart) {
-                            if (busesMarkers.size() == 0) {
-                                return;
-                            } else {
-                                busesDetailsList.clear();
-                                for (Marker busMarker : busesMarkers) {
-                                    busMarker.remove();
+        if (isOnline()) {
+            firstBusesStart = true;
+            linesTimer.cancel();
+            linesTimer = null;
+            linesTimer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!firstBusesStart) {
+                                if (busesMarkers.size() == 0) {
+                                    return;
+                                } else {
+                                    busesDetailsList.clear();
+                                    for (Marker busMarker : busesMarkers) {
+                                        busMarker.remove();
+                                    }
+                                    busesMarkers.clear();
+                                    new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
                                 }
-                                busesMarkers.clear();
+                            } else {
                                 new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
                             }
-                        } else {
-                            new LoadBuses(line).execute(mMap, url, getApplicationContext(), busesMarkers, busesDetailsList);
-                        }
-                        if (firstBusesStart) {
-                            firstBusesStart = false;
-                        }
+                            if (firstBusesStart) {
+                                firstBusesStart = false;
+                            }
 
-                    }
-                });
-            }
-        };
-        this.line = line;
-        String tempLineRoute = lineRoute + line;
-        String tempLineStops = lineStopsUrl + lineLine;
-        Log.d("onClick", "Button is Clicked");
-        Log.d("onClick", url);
+                        }
+                    });
+                }
+            };
+            this.line = line;
+            String tempLineRoute = lineRoute + line;
+            String tempLineStops = lineStopsUrl + lineLine;
+            Log.d("onClick", "Button is Clicked");
+            Log.d("onClick", url);
 
-        if (busesMarkers.size() != 0 || stopsMarkers.size() != 0 || lineDrawing.size() != 0) {
-            for (Marker m : busesMarkers) {
-                m.remove();
+            if (busesMarkers.size() != 0 || stopsMarkers.size() != 0 || lineDrawing.size() != 0) {
+                for (Marker m : busesMarkers) {
+                    m.remove();
+                }
+                for (Marker m : stopsMarkers) {
+                    m.remove();
+                }
+                for (Polyline m : lineDrawing) {
+                    m.remove();
+                }
+                busesDetailsList.clear();
+                busesMarkers.clear();
+                stopsMarkers.clear();
+                lineDrawing.clear();
             }
-            for (Marker m : stopsMarkers) {
-                m.remove();
-            }
-            for (Polyline m : lineDrawing) {
-                m.remove();
-            }
-            busesDetailsList.clear();
-            busesMarkers.clear();
-            stopsMarkers.clear();
-            lineDrawing.clear();
+            linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
+            new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
+            new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
+
+            mDrawerLayout.closeDrawers();
         }
-        linesTimer.scheduleAtFixedRate(timerTask, 0, 30100);
-        new LoadStops().execute(mMap, tempLineStops, getApplicationContext(), stopsMarkers);
-        new LoadLines().execute(mMap, tempLineRoute, lineDrawing);
-
-        mDrawerLayout.closeDrawers();
+        else {
+            Toast.makeText(this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showBusesRotation() {
@@ -974,5 +981,12 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 return;
             }
         }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

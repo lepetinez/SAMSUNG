@@ -1,8 +1,11 @@
 package com.example.pc.laboversionone;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -113,8 +116,9 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Restaurant = "restauracja";
-                Log.d("onClick", "Button is Clicked");
+                if (isOnline()) {
+                    String Restaurant = "restauracja";
+                    Log.d("onClick", "Button is Clicked");
                     mMap.clear();
                     placesDetailsList.clear();
                     String url = getUrl(latitude, longitude, Restaurant);
@@ -125,80 +129,104 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
                     Log.d("onClick", url);
                     GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
                     getNearbyPlacesData.execute(DataTransfer);
-                    Toast.makeText(MapsPlacesActivity.this,"Pobliskie restauracje", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapsPlacesActivity.this, "Pobliskie restauracje", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(MapsPlacesActivity.this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Restaurant = "pub";
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                placesDetailsList.clear();
-                String url = getUrl(latitude, longitude, Restaurant);
-                Object[] DataTransfer = new Object[3];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = placesDetailsList;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Pobliskie puby", Toast.LENGTH_LONG).show();
+                if (isOnline()) {
+                    String Restaurant = "pub";
+                    Log.d("onClick", "Button is Clicked");
+                    mMap.clear();
+                    placesDetailsList.clear();
+                    String url = getUrl(latitude, longitude, Restaurant);
+                    Object[] DataTransfer = new Object[3];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = placesDetailsList;
+                    Log.d("onClick", url);
+                    GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                    getNearbyPlacesData.execute(DataTransfer);
+                    Toast.makeText(MapsPlacesActivity.this, "Pobliskie puby", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(MapsPlacesActivity.this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+                }
             }
         });
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Restaurant = "klub";
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                placesDetailsList.clear();
-                String url = getUrl(latitude, longitude, Restaurant);
-                Object[] DataTransfer = new Object[3];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = placesDetailsList;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Pobliskie kluby", Toast.LENGTH_LONG).show();
+                if (isOnline()) {
+                    String Restaurant = "klub";
+                    Log.d("onClick", "Button is Clicked");
+                    mMap.clear();
+                    placesDetailsList.clear();
+                    String url = getUrl(latitude, longitude, Restaurant);
+                    Object[] DataTransfer = new Object[3];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = placesDetailsList;
+                    Log.d("onClick", url);
+                    GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                    getNearbyPlacesData.execute(DataTransfer);
+                    Toast.makeText(MapsPlacesActivity.this, "Pobliskie kluby", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(MapsPlacesActivity.this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+                }
             }
         });
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Restaurant = "atrakcje";
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                placesDetailsList.clear();
-                String url = getUrl(latitude, longitude, Restaurant);
-                Object[] DataTransfer = new Object[3];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = placesDetailsList;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Pobliskie atrakcje", Toast.LENGTH_LONG).show();
+                if (isOnline()) {
+                    String Restaurant = "atrakcje";
+                    Log.d("onClick", "Button is Clicked");
+                    mMap.clear();
+                    placesDetailsList.clear();
+                    String url = getUrl(latitude, longitude, Restaurant);
+                    Object[] DataTransfer = new Object[3];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = placesDetailsList;
+                    Log.d("onClick", url);
+                    GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                    getNearbyPlacesData.execute(DataTransfer);
+                    Toast.makeText(MapsPlacesActivity.this, "Pobliskie atrakcje", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(MapsPlacesActivity.this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+                }
             }
         });
         button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Restaurant = "kultura";
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                placesDetailsList.clear();
-                String url = getUrl(latitude, longitude, Restaurant);
-                Object[] DataTransfer = new Object[3];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = placesDetailsList;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsPlacesActivity.this,"Pobliskie muzea, wystawy", Toast.LENGTH_LONG).show();
+                if (isOnline()) {
+                    String Restaurant = "kultura";
+                    Log.d("onClick", "Button is Clicked");
+                    mMap.clear();
+                    placesDetailsList.clear();
+                    String url = getUrl(latitude, longitude, Restaurant);
+                    Object[] DataTransfer = new Object[3];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = placesDetailsList;
+                    Log.d("onClick", url);
+                    GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                    getNearbyPlacesData.execute(DataTransfer);
+                    Toast.makeText(MapsPlacesActivity.this, "Pobliskie muzea, wystawy", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(MapsPlacesActivity.this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -272,7 +300,7 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
         else {
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.day_style_json));
         }
-
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.424212, 14.571040), 11.0f)); // Szczecin -> LatLng(53.424212, 14.571040)
         mMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
@@ -394,7 +422,12 @@ public class MapsPlacesActivity extends FragmentActivity implements OnMapReadyCa
                 }
                 return;
             }
-
         }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

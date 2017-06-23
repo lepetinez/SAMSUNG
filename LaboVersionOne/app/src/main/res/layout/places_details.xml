@@ -110,5 +110,60 @@
             android:textSize="12sp"
             android:textAlignment="textEnd" />
     </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:text="Info:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView117"
+            android:textSize="12sp" />
+
+        <TextView
+            android:text="Stu pierwszych klientów otrzymuje dwa darmowe drinki !(zostalo: 67)"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/nazwa_miejsca76"
+            android:textSize="12sp"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:text="Znajomi:"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView113"
+            android:textSize="12sp" />
+
+        <TextView
+            android:text=" Obecnie nie przebywa tu zaden   znajomy"
+            android:layout_width="match_parent"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/nazwa_miejsca2"
+            android:textSize="12sp"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 </LinearLayout>

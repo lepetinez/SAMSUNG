@@ -247,10 +247,10 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                     TextView to = (TextView) view.findViewById(R.id.to);
                     TextView late = (TextView) view.findViewById(R.id.late);
 
-                    line.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4));
-                    from.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 1));
-                    to.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 2));
-                    late.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 4 + 3));
+                    line.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 8));
+                    from.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 8 + 1));
+                    to.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 8 + 2));
+                    late.setText(busesDetailsList.get((Integer.valueOf(marker.getSnippet())) * 8 + 3));
 
                     view.setMinimumWidth(765);
                     view.setMinimumHeight(320);

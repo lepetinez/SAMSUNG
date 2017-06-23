@@ -875,7 +875,13 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                         busMarker.remove();
                     }
                 }
-                new LoadNearStops().execute(mMap, allStopsUrl, latLng.longitude, latLng.latitude, nearBusesMarkers);
+
+                if(isOnline()){
+                    new LoadNearStops().execute(mMap, allStopsUrl, latLng.longitude, latLng.latitude, nearBusesMarkers);
+                }
+                else {
+                    Toast.makeText(MapsActivity.this, "Wymagane  jest połączenie z internetem", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
